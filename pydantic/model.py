@@ -1,6 +1,7 @@
 from typing import Optional, List
 
 from pydantic import BaseModel
+from pydantic.fields import  Field
 
 
 class Person(BaseModel):
@@ -63,3 +64,14 @@ customer = Customer(
         zip_code="1207"
     ))
 print(customer)
+
+
+class Item(BaseModel):
+    id: int
+    name: str = Field(min_length=1, max_length=50)
+    price: float = Field(gt=0,le=1000)
+    quantity: int = Field(gt=0,le=10)
+
+item = Item(id=1,name="Book", price=10, quantity=10)
+print(item)
+
