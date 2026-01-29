@@ -1,8 +1,7 @@
 from pydantic import BaseModel
-from dataclasses import dataclass 
 
-@dataclass
-class Person():
+
+class Person(BaseModel):
     name: str
     age: int
     city: str
