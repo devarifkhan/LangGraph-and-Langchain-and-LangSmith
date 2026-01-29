@@ -28,3 +28,12 @@ class Classroom(BaseModel):
     capacity: int
     has_projector: Optional[bool] = False
     students: List[str]
+
+classroom = Classroom(
+    room_number="A101",
+    capacity=30,
+    has_projector=True,
+    students=["Alice", "Bob", "Charlie"]
+)
+
+print(classroom)
