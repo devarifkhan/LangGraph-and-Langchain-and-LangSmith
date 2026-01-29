@@ -37,3 +37,29 @@ classroom = Classroom(
 )
 
 print(classroom)
+
+
+class Address(BaseModel):
+    street: str
+    city: str
+    state: str
+    zip_code: str
+    country: Optional[str] = "USA"
+
+class Customer(BaseModel):
+    id: int
+    name: str
+    email: str
+    address: Address
+
+customer = Customer(
+    id=1001,
+    name="Ariful Islam",
+    email="arifcse209@gmail.com",
+    address=Address(
+        street="123 Main St",
+        city="Dhaka",
+        state="Dhaka",
+        zip_code="1207"
+    ))
+print(customer)
