@@ -30,6 +30,10 @@ def main():
     )
 
     llm = ChatOpenAI(temperature=0, model="gemini-2.5-flash")
+    chain = summary_prompt_template | llm
+    response = chain.invoke(input={"information":information})
+    print(response)
+
 
 
 if __name__ == "__main__":
