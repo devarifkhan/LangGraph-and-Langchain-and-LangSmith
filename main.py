@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 
 from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 
 load_dotenv()
 
@@ -27,6 +28,8 @@ def main():
     summary_prompt_template = PromptTemplate(
         input_variables=["information"],template=summary_template
     )
+
+    llm = ChatOpenAI(temperature=0, model="gemini-2.5-flash")
 
 
 if __name__ == "__main__":
