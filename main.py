@@ -1,6 +1,8 @@
 from dotenv import load_dotenv
 import os
 
+from langchain_core.prompts import PromptTemplate
+
 load_dotenv()
 
 
@@ -21,6 +23,10 @@ def main():
     1. A short summary
     2. two interesting facts about them
     """
+
+    summary_prompt_template = PromptTemplate(
+        input_variables=["information"],template=summary_template
+    )
 
 
 if __name__ == "__main__":
