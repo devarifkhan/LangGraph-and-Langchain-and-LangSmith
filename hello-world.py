@@ -1,8 +1,6 @@
 from dotenv import load_dotenv
-import os
-
 from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
 
@@ -19,7 +17,7 @@ def main():
     Musk was the largest donor in the 2024 U.S. presidential election, where he supported Donald Trump. After Trump was inaugurated as president in early 2025, Musk served as Senior Advisor to the President and as the de facto head of the Department of Government Efficiency (DOGE). After a public feud with Trump, Musk left the Trump administration and returned to managing his companies. Musk is a supporter of global far-right figures, causes, and political parties. His political activities, views, and statements have made him a polarizing figure. Musk has been criticized for COVID-19 misinformation, promoting conspiracy theories, and affirming antisemitic, racist, and transphobic comments. His acquisition of Twitter was controversial due to a subsequent increase in hate speech and the spread of misinformation on the service, following his pledge to decrease censorship. His role in the second Trump administration attracted public backlash, particularly in response to DOGE.
     """
 
-    summary_template = f"""
+    summary_template = """
     given the information {information} about a person I want you to create:
     1. A short summary
     2. two interesting facts about them
@@ -29,10 +27,10 @@ def main():
         input_variables=["information"],template=summary_template
     )
 
-    llm = ChatOpenAI(temperature=0, model="gemini-2.5-flash")
+    llm = ChatGoogleGenerativeAI(temperature=0, model="gemini-2.5-flash")
     chain = summary_prompt_template | llm
     response = chain.invoke(input={"information":information})
-    print(response)
+    print(response.content)
 
 
 
