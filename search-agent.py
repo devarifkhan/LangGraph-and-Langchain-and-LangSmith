@@ -9,24 +9,36 @@ load_dotenv()
 
 @tool
 def search(query: str) -> str:
-    """
-    Tool that searches over the internet
+    """ Tool that searches over the internet
     Args:
         query (str): The query is searching for
-    Returns:
-        str: The search result
+    Returns: str: The search result
     """
     print(f"Searching for {query}")
     return "Dhaka weather is sunny"
 
 
-llm = ChatGoogleGenerativeAI()
+llm = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
+    temperature=0,
+)
+
 tools = [search]
 agent = create_agent(model=llm, tools=tools)
 
 
 def main():
     print("Hello from langchain agent")
+
+    result = agent.invoke(
+        {
+            "messages": [
+                HumanMessage(content="what is the weather of dhaka?")
+            ]
+        }
+    )
+    print("Agent result:", result)
+
 
 
 if __name__ == "__main__":
