@@ -1,21 +1,26 @@
+from typing import Any
+
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
+from tavily import TavilyClient
 
 load_dotenv()
 
+tavily = TavilyClient()
+
 
 @tool
-def search(query: str) -> str:
+def search(query: str) -> dict[str, Any]:
     """ Tool that searches over the internet
     Args:
         query (str): The query is searching for
     Returns: str: The search result
     """
     print(f"Searching for {query}")
-    return "Dhaka weather is sunny"
+    return tavily.search(query=query)
 
 
 llm = ChatGoogleGenerativeAI(
