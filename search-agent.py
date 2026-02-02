@@ -32,7 +32,7 @@ def main():
     print("Hello from langchain agent")
 
     # Wrap the messages in the AgentInput model
-    input_data = AgentInput(messages=[HumanMessage(content="what is the weather of dhaka?")])
+    input_data = AgentInput(messages=[HumanMessage(content="Search for 3 job postings for an ai engineer using langchain in the dhaka area on linkedin and list their details below.")])
 
     # Pass the BaseModel to agent.invoke
     result: AgentResponse = agent.invoke(input_data)
