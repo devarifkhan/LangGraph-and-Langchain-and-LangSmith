@@ -77,15 +77,16 @@ if __name__ == "__main__":
     Begin!
     
     Question: {input}
-    Thought:
+    Thought: {agent_scratchpad}
     """
 
     prompt = PromptTemplate.from_template(template=template).partial(tools=render_text_description(tools),tool_names=", ".join(t.name for t in tools))
     llm = ChatGoogleGenerativeAI(temperature=0, model="gemini-2.5-flash")
-    agent = {"input" :lambda x:x["input"] } | prompt | llm | ReActSingleInputOutputParser()
+    intermediate_steps = []
+    agent = {"input" :lambda x:x["input"] ,"agent_scratchpad": lambda x:x["agent_scratchpad"]} | prompt | llm | ReActSingleInputOutputParser()
 
 
-    agent_step : Union[AgentAction,AgentFinish]  = agent.invoke({"input":"what is the text length of 'DOG' in characters?"})
+    agent_step : Union[AgentAction,AgentFinish]  = agent.invoke({"input":"what is the text length of 'DOG' in characters?","agent_scratchpad":intermediate_steps})
     print(agent_step)
 
     if isinstance(agent_step,AgentAction):
@@ -95,3 +96,7 @@ if __name__ == "__main__":
 
         observation = tool_to_use.func(str(tool_input))
         print(f"{observation}")
+        intermediate_steps.append(agent_step,str(observation))
+
+    if isinstance(agent_step,AgentFinish):
+        print(agent_step.return_values)
