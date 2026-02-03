@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
-from langchain_core.tools import tool, render_text_description
+from langchain_core.tools import tool, render_text_description, BaseTool
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.output_parsers import BaseOutputParser
 from langchain_core.agents import AgentAction, AgentFinish
@@ -46,6 +46,14 @@ def get_text_length(text:str)->int:
     ''' Returns the length of text by characters '''
     return len(text)
 
+
+def find_tool_by_name(tools: list[BaseTool], tool_name:str)->BaseTool:
+    for tool in tools:
+        if tool_name == tool.name:
+            return tool
+    raise ValueError(f"Tool with name {tool_name} not found")
+
+
 if __name__ == "__main__":
     print("Hello React Langchain!")
     tools = [get_text_length]
@@ -76,5 +84,14 @@ if __name__ == "__main__":
     llm = ChatGoogleGenerativeAI(temperature=0, model="gemini-2.5-flash")
     agent = {"input" :lambda x:x["input"] } | prompt | llm | ReActSingleInputOutputParser()
 
-    res = agent.invoke({"input":"what is the text length of 'DOG' in characters?"})
-    print(res)
+
+    agent_step : Union[AgentAction,AgentFinish]  = agent.invoke({"input":"what is the text length of 'DOG' in characters?"})
+    print(agent_step)
+
+    if isinstance(agent_step,AgentAction):
+        tool_name = agent_step.tool
+        tool_to_use = find_tool_by_name(tools, tool_name)
+        tool_input = agent_step.tool_input
+
+        observation = tool_to_use.func(str(tool_input))
+        print(f"{observation}")
